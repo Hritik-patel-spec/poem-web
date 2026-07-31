@@ -12,7 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-export default function RekhtaHome() {
+export default function anhadHome() {
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
 
   // Sirf pehli 3 latest poems hero slider ke liye
