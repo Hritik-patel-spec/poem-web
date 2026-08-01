@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -11,6 +11,7 @@ import { storiesData } from "@/data/stories";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
 
 export default function anhadHome() {
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
@@ -88,7 +89,7 @@ export default function anhadHome() {
         </div>
       </header>
 
-      {/* 2. HERO BANNER SLIDER (3 Latest Poems with Clickable Link) */}
+      {/* 2. HERO BANNER SLIDER (Dynamic ID Link for Each Poem) */}
       <section className="bg-[#2D1B2D] text-white py-12 px-4 md:px-8 relative group">
         <button
           id="home-prev"
@@ -121,7 +122,8 @@ export default function anhadHome() {
         >
           {latestSlides.map((poem) => (
             <SwiperSlide key={poem.id}>
-              <Link href="/poempage" className="block cursor-pointer">
+              {/* Poem ki ID ke hisab se link pass kar rahe hain taaki exact poem khule */}
+              <Link href={`/poempage?id=${poem.id}`} className="block cursor-pointer">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12 px-10 md:px-16">
                   {/* Author Image */}
                   <div className="w-48 h-60 md:w-64 md:h-80 bg-gray-800 rounded overflow-hidden border border-purple-900 shadow-2xl flex-shrink-0">
@@ -188,7 +190,7 @@ export default function anhadHome() {
         </div>
       </section>
 
-      {/* 4. LATEST STORIES SECTION (Book Style Left Aligned Layout) */}
+      {/* 4. LATEST STORIES SECTION */}
       <section className="py-16 px-4 max-w-3xl mx-auto text-center">
         <p className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-10">
           LATEST SHORT STORIES (लघु कथाएं)

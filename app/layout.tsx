@@ -1,6 +1,7 @@
+import { Analytics } from "@vercel/analytics/nuxt/runtime";
 import type { Metadata } from "next";
 
-const SITE_URL = "https://poem-web.vercel.app"; // Apna final Vercel domain yahan update kar lena
+const SITE_URL = "https://poem-web.vercel.app"; 
 
 export const metadata: Metadata = {
   title: "Anhad - Poetry & Stories Collection",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     siteName: "Anhad Poetry",
     images: [
       {
-        url: `${SITE_URL}/anhad.jpeg`, // Ye image public folder mein honi chahiye
+        url: `${SITE_URL}/anhad.jpeg`, 
         width: 1200,
         height: 630,
         alt: "Anhad Poetry Preview",
@@ -49,7 +50,9 @@ export default function RootLayout({
       </head>
       <body className="bg-[#FFFFFF] text-[#1A1A1A] antialiased">
         {children}
+        import { Analytics } from "@vercel/analytics/next"
       </body>
+    
     </html>
   );
 }
