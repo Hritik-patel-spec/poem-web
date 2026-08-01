@@ -22,7 +22,6 @@ export default function PoemPage() {
     setCurrentIndex((prev) => (prev === totalPoems - 1 ? 0 : prev + 1));
   };
 
-  // Minimum swipe distance (in px) to trigger slide change
   const minSwipeDistance = 50;
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -47,8 +46,30 @@ export default function PoemPage() {
     }
   };
 
+  // Function to generate pagination numbers with ellipsis (...)
+  const getPaginationPages = () => {
+    const pages: (number | string)[] = [];
+    if (totalPoems <= 7) {
+      for (let i = 0; i < totalPoems; i++) pages.push(i);
+    } else {
+      pages.push(0);
+      if (currentIndex > 2) pages.push("...");
+      
+      const start = Math.max(1, currentIndex - 1);
+      const end = Math.min(totalPoems - 2, currentIndex + 1);
+      
+      for (let i = start; i <= end; i++) {
+        if (!pages.includes(i)) pages.push(i);
+      }
+      
+      if (currentIndex < totalPoems - 3) pages.push("...");
+      if (!pages.includes(totalPoems - 1)) pages.push(totalPoems - 1);
+    }
+    return pages;
+  };
+
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between">
+    <div className="min-h-screen bg-white flex flex-col justify-between selection:bg-purple-600 selection:text-white">
       {/* 1. HEADER */}
       <header className="border-b border-gray-200 px-8 py-4 flex items-center justify-between text-xs tracking-wider uppercase relative z-50 bg-white">
         <div className="flex items-center gap-12">
@@ -102,7 +123,6 @@ export default function PoemPage() {
           </nav>
         </div>
 
-        {/* Connect Purple Button */}
         <div>
           <Link
             href="/connect"
@@ -113,33 +133,33 @@ export default function PoemPage() {
         </div>
       </header>
 
-      {/* 2. POEM SLIDER SECTION WITH SWIPE SUPPORT */}
+      {/* 2. POEM SLIDER SECTION */}
       <section 
-        className="py-12 px-6 max-w-3xl mx-auto w-full relative flex-1 flex flex-col justify-center items-center select-none"
+        className="py-12 px-6 max-w-4xl mx-auto w-full relative flex-1 flex flex-col justify-center items-center select-none my-auto"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {/* Left Arrow Button */}
+        {/* Left Fixed Arrow Button */}
         <button
           onClick={handlePrev}
           aria-label="Previous Poem"
-          className="absolute left-2 md:-left-16 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-[#E21B4D] hover:text-white text-gray-800 p-3 rounded-full shadow-md transition-colors z-10 cursor-pointer"
+          className="fixed left-4 md:left-12 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-purple-600 hover:text-white text-gray-800 p-3.5 rounded-full shadow-lg transition-colors z-40 cursor-pointer"
         >
           ❮
         </button>
 
-        {/* Right Arrow Button */}
+        {/* Right Fixed Arrow Button */}
         <button
           onClick={handleNext}
           aria-label="Next Poem"
-          className="absolute right-2 md:-right-16 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-[#E21B4D] hover:text-white text-gray-800 p-3 rounded-full shadow-md transition-colors z-10 cursor-pointer"
+          className="fixed right-4 md:right-12 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-purple-600 hover:text-white text-gray-800 p-3.5 rounded-full shadow-lg transition-colors z-40 cursor-pointer"
         >
           ❯
         </button>
 
         {/* Poem Content */}
-        <div className="text-center w-full px-4">
+        <div className="text-center w-full px-4 max-w-2xl">
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">
             POEMS COLLECTION
           </p>
@@ -156,34 +176,59 @@ export default function PoemPage() {
         </div>
       </section>
 
-      {/* 3. SLIDE COUNT / NAVIGATION NUMBERS */}
-      <footer className="py-8 px-6 border-t border-gray-100 mt-12 bg-white">
-        <div className="max-w-3xl mx-auto flex flex-col items-center gap-3">
-          <p className="text-xs tracking-widest text-gray-500 uppercase font-semibold">
-            Slide {currentIndex + 1} of {totalPoems}
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-2 max-h-32 overflow-y-auto p-2">
-            {poemsData.map((poem, index) => (
-              <button
-                key={poem.id}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-8 h-8 rounded-full text-xs font-semibold transition-all ${
-                  currentIndex === index
-                    ? "bg-[#E21B4D] text-white shadow-md scale-110"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-                title={poem.title}
-              >
-                {index + 1}
-              </button>
-            ))}
+      {/* 3. STICKY PAGINATION / NAVIGATION NUMBERS */}
+      <footer className="sticky bottom-0 z-40 py-4 px-6 border-t border-gray-100 bg-white shadow-sm">
+        <div className="max-w-3xl mx-auto flex items-center justify-center gap-2 md:gap-4 overflow-x-auto py-1">
+          {/* Prev Button */}
+          <button
+            onClick={handlePrev}
+            className="text-xs md:text-sm font-medium text-gray-600 hover:text-purple-600 px-2 py-1 transition-colors whitespace-nowrap cursor-pointer"
+          >
+            ← Prev
+          </button>
+
+          {/* Page Numbers */}
+          <div className="flex items-center gap-1 md:gap-2">
+            {getPaginationPages().map((page, idx) => {
+              if (page === "...") {
+                return (
+                  <span key={`ellipsis-${idx}`} className="px-2 text-gray-400 text-sm select-none">
+                    …
+                  </span>
+                );
+              }
+
+              const pageIndex = page as number;
+              const isActive = currentIndex === pageIndex;
+
+              return (
+                <button
+                  key={pageIndex}
+                  onClick={() => setCurrentIndex(pageIndex)}
+                  className={`min-w-[32px] h-8 px-2 rounded text-xs md:text-sm font-medium transition-all ${
+                    isActive
+                      ? "bg-purple-600 text-white shadow-sm"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {pageIndex + 1}
+                </button>
+              );
+            })}
           </div>
+
+          {/* Next Button */}
+          <button
+            onClick={handleNext}
+            className="text-xs md:text-sm font-medium text-gray-600 hover:text-purple-600 px-2 py-1 transition-colors whitespace-nowrap cursor-pointer"
+          >
+            Next →
+          </button>
         </div>
       </footer>
 
-      {/* 4. FOOTER */}
-      <footer className="py-6 px-8 border-t border-gray-100 text-center text-xs text-gray-400 uppercase tracking-widest bg-white">
+      {/* 4. COPYRIGHT FOOTER */}
+      <footer className="py-3 px-8 border-t border-gray-100 text-center text-xs text-gray-400 uppercase tracking-widest bg-white">
         © {new Date().getFullYear()} Anhad. All rights reserved.
       </footer>
     </div>
