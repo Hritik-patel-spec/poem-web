@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 
-const SITE_URL = "https://anhad-ritik-eta.vercel.app/"; 
+const SITE_URL = "https://anhad-ritik-eta.vercel.app"; 
 
 export const metadata: Metadata = {
   title: "Anhad - Poetry & Stories Collection",
