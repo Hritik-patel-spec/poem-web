@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 
 const SITE_URL = "https://poem-web.vercel.app"; // Apna final Vercel domain yahan update kar lena
 
@@ -49,6 +50,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#FFFFFF] text-[#1A1A1A] antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );
