@@ -1,19 +1,19 @@
-import { Analytics } from "@vercel/analytics/nuxt/runtime";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 
 const SITE_URL = "https://poem-web.vercel.app"; 
 
 export const metadata: Metadata = {
   title: "Anhad - Poetry & Stories Collection",
-  description: "Explore a beautiful collection of heartfelt poems and short stories.",
+  description: "Tumne jo sach kaha, dil ko chubh gaya tha, Magar sochta hoon, achhi baat hai.",
   openGraph: {
     title: "Anhad - Poetry & Stories Collection",
-    description: "Read soul-touching poems and stories in a clean, elegant reading experience.",
+    description: "Tumne jo sach kaha, dil ko chubh gaya tha, Magar sochta hoon, achhi baat hai.",
     url: SITE_URL,
     siteName: "Anhad Poetry",
     images: [
       {
-        url: `${SITE_URL}/anhad.jpeg`, 
+        url: `${SITE_URL}/anhad1.png`, 
         width: 1200,
         height: 630,
         alt: "Anhad Poetry Preview",
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Anhad - Poetry & Stories Collection",
-    description: "Explore a beautiful collection of heartfelt poems and short stories.",
-    images: [`${SITE_URL}/anhad.jpeg`],
+    description: "Tumne jo sach kaha, dil ko chubh gaya tha, Magar sochta hoon, achhi baat hai.",
+    images: [`${SITE_URL}/anhad1.png`],
   },
 };
 
@@ -50,9 +50,8 @@ export default function RootLayout({
       </head>
       <body className="bg-[#FFFFFF] text-[#1A1A1A] antialiased">
         {children}
-        import { Analytics } from "@vercel/analytics/next"
+        <Analytics />
       </body>
-    
     </html>
   );
 }
